@@ -37,8 +37,8 @@ function printSearchResults (result) {
   }
 }
 
-// function that makes the query based on a name and runs the printSearchResults function
-function searchQuery (name) {
+// function that makes the query based on a name
+function searchQuery (name, cb) {
   console.log("Searching ...");
   client.query(`
     SELECT * FROM famous_people
@@ -47,17 +47,17 @@ function searchQuery (name) {
     if (err) {
       return console.error("error running query", err);
     }
-    printSearchResults(result);
+    cb(result);
     client.end();
   });
 }
 
-// connect to the database and runs searchQuery function
+// connect to the database and runs searchQuery function and uses the print search results as a callback
 client.connect((err) => {
   if (err) {
     return console.error("Connection Error", err);
   }
-  searchQuery(searchName)
+  searchQuery(searchName, printSearchResults)
 });
 
 
